@@ -3,6 +3,7 @@
         "*.tcc": "cpp",
         "bitset": "cpp",
         "random": "cpp",
-        "valarray": "cpp"
+        "valarray": "cpp",
+        "functional": "cpp"
     }
 }
