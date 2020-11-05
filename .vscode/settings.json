@@ -4,6 +4,7 @@
         "bitset": "cpp",
         "random": "cpp",
         "valarray": "cpp",
-        "functional": "cpp"
+        "functional": "cpp",
+        "vector": "cpp"
     }
 }
