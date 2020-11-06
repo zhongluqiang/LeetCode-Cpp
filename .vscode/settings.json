@@ -5,6 +5,7 @@
         "random": "cpp",
         "valarray": "cpp",
         "functional": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "queue": "cpp"
     }
 }
