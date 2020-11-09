@@ -1,5 +1,6 @@
 #include "leetcode-definition.h"
 #include <unordered_map>
+#include <unordered_set>
 using namespace std;
 #define INPUT "817.txt"
 /*
@@ -17,43 +18,59 @@ using namespace std;
  *     ListNode(int x) : val(x), next(NULL) {}
  * };
  */
+#if 0
 class Solution {
+    void dfs(int cur, unordered_map<int, vector<int>> &g, unordered_set<int> &visited) {
+        if(visited.count(cur)) {
+            return;
+        }
+        visited.insert(cur);
+        for(const int next : g[cur]) {
+            dfs(next, g, visited);
+        }
+    }
 public:
     int numComponents(ListNode* head, vector<int>& G) {
-        int ans = 0;
-        ListNode *node;
-        unordered_map<int, int> indexG;
-        unordered_map<int, ListNode*> indexNode;
+        unordered_set<int> f(G.begin(), G.end());
+        unordered_map<int, vector<int>> g;
 
-        // 因为链表值是唯一的，这里对链表和输入数组建立反向索引，便于根据值引用到链表结点，
-        // 以及快速递归某个值是否在输入数组G中
-        for(int i = 0; i < G.size(); i++) {
-            indexG[G[i]] = i;
-        }
-
-        for(node = head; node != nullptr; node = node->next) {
-            indexNode[node->val] = node;
-        }
-
-        // 遍历链表结点，判断结点的值是否存在数组G中，如果存，则遍历该结点后面连续出现在数组G中的结点，
-        // 直到结点的值不在数组G中为止，每遍历一个值，就是数组G中把这个值删除，最后再删除起点的值，结果加1
-        node = head;
-        while(node != nullptr) {
-            int val = node->val;
-            if(indexG.find(val) != indexG.end()){
-                while(node->next && indexG.find(node->next->val) != indexG.end()) {
-                    indexG.erase(node->next->val);
-                    node = node->next;
-                }
-                indexG.erase(val);
-                ans++;
-            } else {
-                node = node->next;
+        int u = head->val;
+        while(head->next) {
+            head = head->next;
+            int v = head->val;
+            if(f.count(u) && f.count(v)) {
+                g[u].push_back(v);
+                g[v].push_back(u);
             }
+            u = v;
         }
-
+        
+        int ans = 0;
+        unordered_set<int> visited;
+        for(int u : G) {
+            if(visited.count(u)) continue;
+            ++ans;
+            dfs(u, g, visited);
+        }
+        return ans;
+    } // end numComponents
+};
+#else
+class Solution {
+   
+public:
+    int numComponents(ListNode* head, vector<int>& G) {
+        unordered_set<int> g(G.begin(), G.end());
+        int ans = 0;
+        while(head) {
+            if(g.count(head->val) && (!head->next || !g.count(head->next->val))) {
+                ans++;
+            }
+            head = head->next;
+        }
         return ans;
     }
 };
+#endif
 // @lc code=end
 
