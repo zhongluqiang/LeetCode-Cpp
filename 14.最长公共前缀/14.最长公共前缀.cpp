@@ -13,29 +13,22 @@ class Solution {
 public:
     string longestCommonPrefix(vector<string>& strs) {
         const int size = strs.size();
+        if(size == 0) {
+            return "";
+        }
+        // 按字典序从小到大排序，再求最小串与最大串的最长公共前缀就是全部串的最长公共前缀
+        sort(strs.begin(), strs.end());
+        string s1 = strs[0];
+        string s2 = strs[size - 1];
         string ans;
-
-        // 统计最长公共前缀的最大值，对应最短的字符串的长度，最公共前缀不会超过这个长度
-        int maxCommLen = INT_MAX;
-        for(int i = 0; i < size; i++) {
-            if(maxCommLen > strs[i].size()) {
-                maxCommLen = strs[i].size();
+        for(int i = 0; i < min(s1.size(), s2.size()); i++) {
+            if(s1[i] != s2[i]) {
+                return ans;
+            } else {
+                ans.push_back(s1[i]);
             }
         }
-        if(maxCommLen == 0 || maxCommLen == INT_MAX) {
-            return ans;
-        }
-
-        // 逐个比较得出最长公共前缀
-        for(int i = 0; i < maxCommLen; i++) {
-            for(int j = 0; j < size-1; j++) {
-                if(strs[j][i] != strs[j+1][i]) {
-                    return ans;
-                }
-            }
-            ans.push_back(strs[0][i]);
-        }
-
+        
         return ans;
     } // end longestCommonPrefix
 };
