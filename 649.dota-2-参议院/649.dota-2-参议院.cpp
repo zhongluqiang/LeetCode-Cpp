@@ -11,41 +11,34 @@ using namespace std;
 // @lc code=start
 class Solution {
 public:
-    // 保证每次都干掉下一轮离自己最近的对手就可以保证最已方最大优势，直到已方人数超过对方的两倍即可
     string predictPartyVictory(string senate) {
-        char opponent['R'+1];
-        opponent['R'] = 'D';
-        opponent['D'] = 'R';
         const int size = senate.size();
-        int rs = 0;
-        int ds = 0;
-        for(auto &ch : senate) {
-            ch == 'R' ? ++rs : ++ds;
+        
+        // 用两个队列存储天辉和夜魇的索引
+        queue<int> ra, di;
+        for(int i = 0; i < size; i++) {
+            if(senate[i] == 'R') {
+                ra.push(i);
+            } else {
+                di.push(i);
+            }
         }
+
+        // 两个队列同时出队，索引靠前的再回队，靠后的不回队，表示靠后的被靠前的干掉了
         while(1) {
-            if(rs > ds*2 || ds > 2*rs) {
-                    break;
+            if(ra.size() > di.size()*2 || di.size() > ra.size()*2) {
+                break;
             }
-            for(int i = 0; i < size; i++) {
-                if(senate[i] == 'x') {
-                    continue;
-                }
-                int j = i+1;
-                while(senate[j%size] != opponent[senate[i]]) {
-                    j++;
-                }
-                if(senate[j%size] == 'R') {
-                    rs--;
-                } else {
-                    ds--;
-                }
-                if(rs > ds*2 || ds > 2*rs) {
-                    break;
-                }
-                senate[j%size] = 'x';
+            int raIdx = ra.front(); ra.pop();
+            int diIdx = di.front(); di.pop();
+            if(raIdx < diIdx) {
+                ra.push(raIdx+size); // 重新回队的时候位置加上size，表示下一轮循环的位置
+            } else {
+                di.push(diIdx+size);
             }
         }
-        if(rs > ds*2) {
+
+        if(ra.size() > di.size()*2) {
             return "Radiant";
         } else {
             return "Dire";
