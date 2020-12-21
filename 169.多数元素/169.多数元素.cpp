@@ -9,21 +9,23 @@ using namespace std;
 // @lc code=start
 class Solution {
 public:
+    // 摩尔投票法
     int majorityElement(vector<int>& nums) {
-        const int size = nums.size();
-        unordered_map<int, int> count;
+        int major = nums[0];
+        int count = 1;
 
-        for(auto i : nums) {
-            count[i]++;
-        }
-
-        for(auto p : count) {
-            if(p.second > size / 2) {
-                return p.first;
+        for(int i = 1; i < nums.size(); i++) {
+            if(nums[i] == major) {
+                count++;
+            } else {
+                count--;
+                if(count == 0) {
+                    major = nums[i];
+                    count = 1;
+                }
             }
         }
-
-        return 0; // never here
+        return major;
     }
 };
 // @lc code=end
