@@ -11,17 +11,17 @@ using namespace std;
 class Solution {
 public:
     vector<int> twoSum(vector<int>& numbers, int target) {
-        unordered_map<int, int> index; // 值 -> 下标
-        for(int i = 0; i < numbers.size(); i++) {
-            index[numbers[i]] = i+1;
-        }
-
-        for(int i = 0; i < numbers.size(); i++) {
-            if(index.count(target - numbers[i]) > 0) {
-                return {i+1, index[target-numbers[i]]};
+        int left = 0, right = numbers.size() - 1;
+        while(left <= right) {
+            if(numbers[left] + numbers[right] == target) {
+                return {left+1, right+1};
+            }
+            if(numbers[left] + numbers[right] > target) {
+                right--;
+            } else {
+                left++;
             }
         }
-
         return {0, 0};
     }
 };
