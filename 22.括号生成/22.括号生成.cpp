@@ -9,6 +9,7 @@ using namespace std;
  */
 
 // @lc code=start
+#if 0
 class Solution {
     vector<vector<string>> ans; // ans[i]表示生成i对括号的组合
 
@@ -46,5 +47,37 @@ public:
         return ans[n];
     }
 };
+#else
+class Solution {
+    // 深度优先搜索，left,right表示剩余可用的左、右括号数
+    void dfs(int left, int right, string cur, vector<string> &ans) {
+        // 剩余的左括号大于右括号，说明之前用掉的右括号比左括号多，例如())，一旦出现这种情况当前组合就是无效的，可以直接返回
+        if(left > right) {
+            return;
+        }
+        // 左右括号都用完了，将结果加入结果集合
+        if(left == 0 && right == 0) {
+            ans.push_back(cur);
+        }
+        // 还有左右括号没用完，继续递归
+        if(left > 0) {
+            dfs(left-1, right, cur+"(", ans);
+        }
+        if(right > 0) {
+            dfs(left, right-1, cur+")", ans);
+        }
+    }
+
+public:
+    vector<string> generateParenthesis(int n) {
+        vector<string> ans;
+        if(n == 0) { return ans; }
+        if(n == 1) { return {"()"}; }
+
+        dfs(n, n, "", ans);
+        return ans;
+    }
+};
+#endif
 // @lc code=end
 
