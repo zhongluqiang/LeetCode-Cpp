@@ -14,44 +14,37 @@ using namespace std;
 class Solution {
 public:
     vector<vector<int>> threeSum(vector<int>& nums) {
-        vector<vector<int>> result;
-        if(nums.size() < 3) { return result; }
+        vector<vector<int>> ans;
+        const int size = nums.size();
+        if(size < 3) { return ans; }
 
         sort(nums.begin(), nums.end());
 
-        auto it = nums.begin();
-        while(it != nums.end() - 2) {
-            int now = *it;
-            auto leftpos = it + 1;
-            auto rightpos = nums.end() - 1;
-
-            while(leftpos < rightpos) {
-                int leftvalue = *leftpos;
-                int rightvalue = *rightpos;
-                int sum = leftvalue + rightvalue + now;
+        // 双指针法，固定num1，num2和num3从首尾向中移动
+        for(int n1 = 0; n1 <= size-3; /**/) {
+            int num1 = nums[n1];
+            int l = n1+1;
+            int r = size-1;
+            while(l < r) {
+                int num2 = nums[l];
+                int num3 = nums[r];
+                int sum = num1 + num2 + num3;
                 if(sum == 0) {
-                    result.push_back(vector<int>{now, leftvalue, rightvalue});
-                    //leftpos和rightpos分别指向下一个不同的值，避免结果重复
-                    do {
-                        leftpos++;
-                    } while(*leftpos == leftvalue && leftpos < rightpos);
-                    do {
-                        rightpos--;
-                    } while(*rightpos == rightvalue && rightpos > leftpos);
-                } else if(sum > 0) {
-                    rightpos--;
+                    ans.push_back({num1, num2, num3});
+                    // 左右指针移动到下一个不同的值，避免结果重复
+                    while(l < r && nums[l] == num2) { l++; }
+                    while(l < r && nums[r] == num3) { r--; }
+                } else if(sum < 0) {
+                    l++;
                 } else {
-                    leftpos++;
+                    r--;
                 }
             }
-            
-            // it指向下一个与当前值不同的位置
-            do {
-                it++;
-            }while(*it == now && it !=nums.end() - 2);
+            // num1移动到下一个不同的值，避免结果重复
+            while(n1 <= size-3 && nums[n1]== num1) { n1++; }
         }
 
-        return result;
+        return ans;
     }
 };
 // @lc code=end
