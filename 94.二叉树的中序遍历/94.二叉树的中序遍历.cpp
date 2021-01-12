@@ -17,6 +17,7 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
+#if 0
 class Solution {
     vector<int> ans;
     void inorder(TreeNode *root) {
@@ -37,5 +38,28 @@ public:
         return ans;
     }
 };
+#else 
+class Solution {
+public:
+    // 非递归算法，使用栈进行迭代
+    vector<int> inorderTraversal(TreeNode* root) {
+        vector<int> ans;
+        stack<TreeNode*> s;
+        TreeNode *cur = root;
+        while(cur || !s.empty()) {
+            if(cur) {
+                s.push(cur);
+                cur = cur->left;
+            } else {
+                cur = s.top();
+                s.pop();
+                ans.push_back(cur->val);
+                cur = cur->right;
+            }
+        }
+        return ans;
+    }
+};
+#endif
 // @lc code=end
 
