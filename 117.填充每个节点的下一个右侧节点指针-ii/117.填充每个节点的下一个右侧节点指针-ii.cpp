@@ -9,22 +9,24 @@ using namespace std;
 // @lc code=start
 
 // Definition for a Node.
-// class Node {
-// public:
-//     int val;
-//     Node* left;
-//     Node* right;
-//     Node* next;
+#if 0
+class Node {
+public:
+    int val;
+    Node* left;
+    Node* right;
+    Node* next;
 
-//     Node() : val(0), left(NULL), right(NULL), next(NULL) {}
+    Node() : val(0), left(NULL), right(NULL), next(NULL) {}
 
-//     Node(int _val) : val(_val), left(NULL), right(NULL), next(NULL) {}
+    Node(int _val) : val(_val), left(NULL), right(NULL), next(NULL) {}
 
-//     Node(int _val, Node* _left, Node* _right, Node* _next)
-//         : val(_val), left(_left), right(_right), next(_next) {}
-// };
+    Node(int _val, Node* _left, Node* _right, Node* _next)
+        : val(_val), left(_left), right(_right), next(_next) {}
+};
+#endif 
 
-
+#if 0
 class Solution {
 public:
     Node* connect(Node* root) {
@@ -59,5 +61,33 @@ public:
         return root;
     } // end connect
 };
+#else 
+class Solution {
+public:
+    Node* connect(Node* root) {
+        if(!root) {
+            return root;
+        }
+        Node *cur = root;
+        while(cur != nullptr) {
+            Node dummy = Node(0); // 用一个头节点标注下一层链表的起始位置
+            Node *pre = &dummy; 
+            while(cur) {
+                if(cur->left) {
+                    pre->next = cur->left;
+                    pre = pre->next;
+                }
+                if(cur->right) {
+                    pre->next = cur->right;
+                    pre = pre->next;
+                }
+                cur = cur->next;
+            }
+            cur = dummy.next;
+        }
+        return root;
+    }
+};
+#endif
 // @lc code=end
 
