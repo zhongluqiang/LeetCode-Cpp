@@ -10,7 +10,7 @@ using namespace std;
 class Solution {
     class DSU{
         private:
-            // parent[i]表示i节点所在集合的祖先结点，sz[i]表示以i为集合祖先、也就是parent[i]=i时，这个集合的节点数量
+            // parent[i]表示i节点所在集合的祖先结点，sz[i]表示i节点所在集合的节点数量
             vector<int> parent, sz; 
         public:
             DSU(int n) : parent(n), sz(n) {
@@ -46,15 +46,15 @@ public:
         DSU dsu(h*w + 1);
         vector<vector<int>> status = grid;
         
-        // 反向考虑问题，先将所有待敲掉的砖全敲掉，得出敲掉之后的并查集合，再从后向前依次补上敲掉的砖块，每补一块，
-        // 计算补上之后根节点的并查集多了几个节点，就是这次操作会掉落的砖块数量
+        // 反向考虑问题，先将所有待敲掉的砖全敲掉，计算敲掉之后的并查集，再从后向前依次补上敲掉的砖块，每补一块，
+        // 计算补上之后顶行所在的集合增加了几个节点，就是这次操作会掉落的砖块数量
 
         // 先敲掉所有砖块，记录状态信息status
         for(int i = 0; i < hits.size(); i++) {
             status[hits[i][0]][hits[i][1]] = 0;
         }
 
-        // 构造status的并查集合
+        // 构造status的并查集，坐标进行归一化，(x,y)归一化成i*w+j
         // 注意将第一行的全部节点看成一个集合，为方便计算将h*w设置成根结点，后续要根据这个集合的节点数量来计算掉落的砖块数
         for(int i = 0; i < h; i++) {
             for(int j = 0; j < w; j++) {
@@ -91,7 +91,7 @@ public:
                 // 补顶行的砖，先将这个点合并到顶行的集合
                 dsu.merge(y, h*w);
             }
-            // 遍历周围4个相邻的点，将(x,y)依次合并到这4个点的集合，最后看根结点所在的集合增加了几个元素
+            // 遍历周围4个相邻的点，将(x,y)依次合并到这4个点的集合，最后看顶行所在的集合增加了几个元素
             for(int i = 0; i < 4; i++) {
                 int tx = x + dirs[i];
                 int ty = y + dirs[i+1];
