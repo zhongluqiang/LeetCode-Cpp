@@ -10,7 +10,9 @@
         "array": "cpp",
         "string_view": "cpp",
         "regex": "cpp",
-        "utility": "cpp"
+        "utility": "cpp",
+        "deque": "cpp",
+        "string": "cpp"
     },
     "cmake.configureOnOpen": false
 }
